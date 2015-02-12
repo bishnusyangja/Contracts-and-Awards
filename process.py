@@ -25,14 +25,16 @@ def process(contract_rows, award_rows, award_header):
 		row = False
 		for award_row in award_rows:
 			location = award_row.get('awardeeLocation', '')
-			loc_dic = add_location('latLon', location)
 			if contract_row['contractName'] == award_row['contractName']:
+				if location:
+					loc_dic = add_location('latLon', location)
+				else:
+					loc_dic = add_location('latLon', '')
 				final_contracts.append(dict(contract_row.items() + award_row.items() + loc_dic.items() ))
 				row = True
 				break
 		if not row:
-			location = award_row.get('awardeeLocation', '')
-			loc_dic = add_location('latLon', location)
+			loc_dic = add_location('latLon', '')
 			final_contracts.append(dict(contract_row.items() + empty_award.items() + loc_dic.items() ))
 	return final_contracts
 
